@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import filedialog, messagebox
-from PIL import Image
+from PIL import Image, ExifTags
 
 def seleccionar_imagen():
     # Abre un cuadro de diálogo para seleccionar la imagen
@@ -11,6 +11,23 @@ def seleccionar_imagen():
         lbl_ruta.config(text=f"Imagen seleccionada: {filepath}")
         global imagen
         imagen = Image.open(filepath)
+        
+        # Corregir la orientación si es necesario
+        try:
+            for orientation in ExifTags.TAGS.keys():
+                if ExifTags.TAGS[orientation] == 'Orientation':
+                    break
+            exif = imagen._getexif()
+            if exif and orientation in exif:
+                if exif[orientation] == 3:
+                    imagen = imagen.rotate(180, expand=True)
+                elif exif[orientation] == 6:
+                    imagen = imagen.rotate(270, expand=True)
+                elif exif[orientation] == 8:
+                    imagen = imagen.rotate(90, expand=True)
+        except (AttributeError, KeyError, IndexError):
+            # La imagen no tiene información EXIF o no se puede rotar
+            pass
 
 def exportar_imagen():
     if imagen is None:
