@@ -79,4 +79,8 @@ entrada_calidad.pack()
 btn_exportar = tk.Button(ventana, text="Exportar imagen", command=exportar_imagen)
 btn_exportar.pack(pady=10)
 
+# Información del creador en la parte inferior derecha
+etiqueta_info = tk.Label(ventana, text="Desarrollado por [Juan Antonio Galván] - v1.0", font=("terminal", 7))
+etiqueta_info.pack(side=tk.BOTTOM, anchor=tk.SE, padx=5, pady=5)
+
 ventana.mainloop()
